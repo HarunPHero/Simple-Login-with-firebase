@@ -32,13 +32,20 @@ function App() {
 
   const signInWithGoogle = () => {
     signInWithPopup(auth, GoogleProvider).then((result) => {
-      const {displayName,photoURL, email} = result.user;
+      const {displayName,firstName, lastName, photoUrl} = result?._tokenResponse;
+      const {providerId, operationType} = result
       let loggedPeople = {
-        name:displayName,
-        photo:photoURL,
+
+        fullName:displayName,
+        firstName:firstName,
+        lastName:lastName,
+        operationType:operationType,
+        into:providerId,
+        photo:photoUrl,
         email:email
       };
       setPeople(loggedPeople)
+      console.log(result)
     });
   };
   const handleRegister = (e) => {
@@ -99,13 +106,18 @@ function App() {
   };
   const signInWithfacebook = () => {
     signInWithPopup(auth, FacebookProvider).then((result) => {
-      const {displayName,photoURL, email} = result.user;
+      const {displayName,firstName, lastName, photoUrl} = result._tokenResponse;
+      const {providerId, operationType} = result
       let loggedPeople = {
-        name:displayName,
-        photo:photoURL,
+
+        fullName:displayName,
+        firstName:firstName,
+        lastName:lastName,
+        operationType:operationType,
+        into:providerId,
+        photo:photoUrl,
         email:email
       };
-      console.log(result.user)
       setPeople(loggedPeople)
     });
   };
@@ -117,11 +129,16 @@ function App() {
   };
   const signInWithGithub = () => {
     signInWithPopup(auth, GitProvider).then((result) => {
-      const {displayName,photoURL, email} = result?.user;
+      const {displayName,firstName, lastName, photoUrl} = result._tokenResponse;
+      const {providerId, operationType} = result
       let loggedPeople = {
-        name:displayName,
-        photo:photoURL,
-        email:email
+
+        fullName:displayName,
+        firstName:firstName,
+        lastName:lastName,
+        operationType:operationType,
+        into:providerId,
+        photo:photoUrl
       };
       setPeople(loggedPeople)
     });
@@ -135,8 +152,8 @@ function App() {
   };
 
   return (
-    <div className="m-5">
-      {!people.name ?
+    <div className="m-1">
+      {!people.fullName ?
         <>
           {" "}
           <h1 className="text-center text-primary">
@@ -154,7 +171,7 @@ function App() {
               >
                 <svg
                   aria-hidden="true"
-                  class="native svg-icon iconGoogle"
+                  className="native svg-icon iconGoogle"
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -186,7 +203,7 @@ function App() {
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-icon iconFacebook"
+                  className="svg-icon iconFacebook"
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -206,7 +223,7 @@ function App() {
               >
                 <svg
                   aria-hidden="true"
-                  class="svg-icon iconGitHub"
+                  className="svg-icon iconGitHub"
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -295,12 +312,27 @@ function App() {
               </button>
             </form>
           </div>
-        </>:<div className="text-center">
-        <button className="btn btn-danger"onClick={logout}>Logout</button>
-        <h1>Hello {people.name}</h1>
-        <h1>Your email is {people.email || "none (you have no email for this account)"}</h1>
-        <img src={people.photo} alt="" />
+        </>:
+        <div class="card m-5" >
+          <h1 className="text-center text-primary">Details about your account</h1>
+        <img src={people?.photo} class="card-img-top" alt="..."/>
+        <div class="card-body">
+          <h5 class="card-title"><span className="name">Account Name:</span> {people?.fullName}</h5>
+          <h5><span className="name">First name:</span> { people?.firstName? `Your first name is ${people.firstName}`:"You have no first name for this account"}</h5>
+          <h5><span className="name">Last name:</span> { people?.firstName? `Your last name is ${people.lastName}`:"You have no last name for this account"}</h5>
+          <h5>You <span className="operation">{people?.operationType}</span> by <span className="operation">{people?.into}</span></h5>
+          <button onClick={logout} class="btn btn-danger">Logout</button>
         </div>
+      </div>
+        // <div className="text-center">
+        // <button className="btn btn-danger"onClick={logout}>Logout</button>
+        // <h3>Hello {people?.fullName}</h3>
+        // <h3>You {people?.operationType} by {people.into} </h3>
+        // <h3>{ people?.firstName? `Your first name is ${people.firstName}`:"You have no first name for this account"}</h3>
+        // <h3>{ people?.firstName? `Your last name is ${people.lastName}`:"You have no last name for this account"}</h3>
+        // <img src={people?.photo} alt="" />
+        
+        // </div>
       }
     </div>
   );

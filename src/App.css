@@ -1,6 +1,12 @@
 .App {
   text-align: center;
 }
+.name{
+  color: rgb(26, 131, 252);
+}
+.operation{
+  color: rgb(69, 192, 21);
+}
 
 .App-logo {
   height: 40vmin;
